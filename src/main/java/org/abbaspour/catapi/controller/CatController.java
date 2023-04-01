@@ -21,7 +21,11 @@ public class CatController {
     public ResponseEntity<Cat> getCat(
             @PathVariable Long id
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(catService.getCat(id));
+        Cat cat = catService.getCat(id);
+        return cat != null ?
+                ResponseEntity.status(HttpStatus.OK).body(cat)
+                :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
     @PostMapping("/new/")
