@@ -26,8 +26,8 @@ public class Cat {
     @Pattern(regexp = "^\\w[\\w\\s]+")
     private String favoriteFood;
 
-    @Size(min = 1, max = 30)
-    @Pattern(regexp = "^\\w[\\w\\s]+")
+    @Size(max = 30)
+    @Pattern(regexp = "[\\w\\s]*")
     private String owner;
 
     public Long getId() {
