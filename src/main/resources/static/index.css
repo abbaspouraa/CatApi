@@ -28,7 +28,7 @@ body {
 
 #div-bg {
     background: url("bg_1.jpg");
-    background-size: contain;
+    background-size: cover;
     background-position-y: bottom;
     background-position-x: center;
     width: 100%;
