@@ -19,6 +19,10 @@ public class Cat {
     @Pattern(regexp = "^\\w[\\w\\s]+")
     private String name;
 
+    @Size(max = 30)
+    @Pattern(regexp = "[\\w\\s]*")
+    private String color;
+
     @NotNull
     private Date birthDate;
 
@@ -68,5 +72,13 @@ public class Cat {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
