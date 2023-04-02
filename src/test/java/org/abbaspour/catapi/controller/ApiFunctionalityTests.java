@@ -54,7 +54,7 @@ public class ApiFunctionalityTests {
      * Valid entity is deleted
      */
     @Test
-    public void testPostAndRetrieveObject() {
+    public void testPostRetrieveAndDeleteObject() {
 
         // Add a valid cat
         ResponseEntity<Cat> response = this.postCat(null);
