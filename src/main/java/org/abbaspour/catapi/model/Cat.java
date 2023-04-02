@@ -2,10 +2,7 @@ package org.abbaspour.catapi.model;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -19,15 +16,18 @@ public class Cat {
 
     @NotNull
     @Size(min = 1, max = 30)
-    @NotEmpty
-    @NotBlank
+    @Pattern(regexp = "^\\w[\\w\\s]+")
     private String name;
 
     @NotNull
     private Date birthDate;
 
+    @Size(min = 1, max = 30)
+    @Pattern(regexp = "^\\w[\\w\\s]+")
     private String favoriteFood;
 
+    @Size(min = 1, max = 30)
+    @Pattern(regexp = "^\\w[\\w\\s]+")
     private String owner;
 
     public Long getId() {

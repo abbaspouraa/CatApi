@@ -32,7 +32,11 @@ public class CatController {
     public ResponseEntity<Cat> createCat(
             @Valid @RequestBody Cat cat
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(catService.addCat(cat));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(catService.addCat(cat));
+        } catch (RuntimeException exception) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(cat);
+        }
     }
 
     @DeleteMapping("/delete/{id}")

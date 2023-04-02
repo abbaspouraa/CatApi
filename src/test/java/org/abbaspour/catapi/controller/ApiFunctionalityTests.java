@@ -6,8 +6,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -145,6 +150,43 @@ public class ApiFunctionalityTests {
     }
 
     /**
+     * api/new/
+     * Invalid entity is sent in the request
+     * Sending one object twice
+     */
+    @Test
+    public void testPostSameObjectTwice() {
+        // Sending same object twice
+        ResponseEntity<Cat> response1 = this.postCat(null);
+        ResponseEntity<Cat> response2 = this.postCat(null);
+
+        assertEquals(HttpStatus.OK, response1.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, response2.getStatusCode());
+        assertNotNull(response1.getBody().getId());
+        assertNull(response2.getBody().getId());
+    }
+
+    /**
+     * api/new/
+     * Invalid entity is sent in the request
+     * Posting object with illegal characters.
+     */
+    @Test
+    public void testPostObjectWithIllegalCharacters() {
+        String illegalObject = "{\n" +
+                "  \"birthDate\": \"2023-04-02T16:41:06.014Z\",\n" +
+                "  \"favoriteFood\": \"<h1>Script Injection<\\h1>\",\n" +
+                "  \"name\": \"<script>window.setTimeout( function() {window.location.reload()}, 30000)<\\script>\",\n" +
+                "  \"owner\": \"string\"\n" +
+                "}";
+
+        // Sending same object twice
+        ResponseEntity<Cat> response = this.postCat(illegalObject);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    /**
      * api/cat/delete/{id}
      * Invalid Id is sent in the request
      */
@@ -161,5 +203,32 @@ public class ApiFunctionalityTests {
         }
 
         assertFalse(havingError);
+    }
+
+    /**
+     * api/cat/list/
+     * Get API list works as expected
+     */
+    @Test
+    public void testGetAll() {
+        String amirsCat = "{\n" +
+                "  \"birthDate\": \"2020-07-01T17:24:06.667\",\n" +
+                "  \"favoriteFood\": \"Tuna\",\n" +
+                "  \"name\": \"Mustache\",\n" +
+                "  \"owner\": \"Amir\"\n" +
+                "}";
+        // Posting two objects
+        this.postCat(null);
+        this.postCat(amirsCat);
+
+        // Calling the get API
+        ResponseEntity<Cat[]> response = restTemplate.getForEntity(
+                "/api/cat/list/",
+                Cat[].class
+        );
+
+        // Assertions
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, Objects.requireNonNull(response.getBody()).length);
     }
 }

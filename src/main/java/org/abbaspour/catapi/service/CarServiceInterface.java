@@ -9,7 +9,7 @@ public interface CarServiceInterface {
 
     Cat getCat(Long id);
 
-    Cat addCat(Cat cat);
+    Cat addCat(Cat cat) throws RuntimeException;
 
     void deleteCat(Long id);
 }

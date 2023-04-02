@@ -24,7 +24,17 @@ public class CatService implements CarServiceInterface {
     }
 
     @Override
-    public Cat addCat(Cat cat) {
+    public Cat addCat(Cat cat) throws RuntimeException {
+        if (
+                catRepo.findCatByBirthDateAndNameAndOwnerAndFavoriteFood(
+                        cat.getBirthDate(),
+                        cat.getName(),
+                        cat.getOwner(),
+                        cat.getFavoriteFood()
+                ).isPresent()
+        ) {
+            throw new RuntimeException();
+        }
         return catRepo.save(cat);
     }
 
